@@ -199,7 +199,7 @@ def _loop_segmented_mutual(r, z, pts):
         delta = pts[i, :] - pts[i + 1, :]
         rs = math.sqrt(midp[0] ** 2 + midp[1] ** 2)
         zs = midp[2]
-        rdphi = (delta[0] * midp[1] - delta[1] * midp[0]) / rs
+        rdphi = (delta[0] * midp[1] - delta[1] * midp[0]) / rs**2
         M += AGreen(r, z, rs, zs) * rdphi
 
     return M
@@ -214,10 +214,10 @@ def mutual_filaments_segmented(fils, pts):
     return M
 
 
-def M_filsol_path(fil, pts, nt, ds=0):
+def M_filsol_path(fils, pts, nt, ds=0):
     """Mutual inductance between a set of axisymmetric filaments and a path from pts."""
     segs, _ = segment_path(pts, ds)
-    return nt * mutual_filaments_segmented(fil, segs)
+    return nt * mutual_filaments_segmented(fils, segs)
 
 
 @njit(parallel=True)
