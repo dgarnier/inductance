@@ -190,8 +190,8 @@ def segment_path(pts, ds=0, close=False):
 
 @njit
 def _loop_segmented_mutual(r, z, pts):
-    # segments is array of n x 3 (x,y,z)
-    # segments should contain first point at start AND end.
+    # pts is array of n x 3 (x,y,z)
+    # pts should contain first point at start AND end.
     # r, z is r & z of loop
     M = float(0)
     for i in range(pts.shape[0] - 1):
