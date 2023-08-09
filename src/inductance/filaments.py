@@ -235,6 +235,18 @@ def _loop_segmented_mutual(r, z, pts):
     return M
 
 
+@njit
+def _segmented_segmented_mutual(pts1, pts2):
+    Avecs = np.zeros_like(pts2)
+    for i in range(pts1.shape[0] - 1):
+        xyz = pts1[i]
+        uvw = pts1[i+1]-pts1[i]
+        Avecs += ASegment(pts2,xyz,uvw)
+    A_midps = (Avecs[1:]+Avecs[:-1])/2
+    deltas = pts2[1:]-pts2[:-1]
+    dots = deltas[:,0]*A_midps[:,0] + deltas[:,1]*A_midps[:,1] + deltas[:,2]*A_midps[:,2]
+    return np.sum(dots)
+
 @njit(parallel=True)
 def mutual_filaments_segmented(fils, pts):
     """Mutual inductance between a set of axisymmetric filaments and a segmented path."""
@@ -249,17 +261,13 @@ def M_filsol_path(fils, pts, nt, ds=0):
     segs, _ = segment_path(pts, ds)
     return nt * mutual_filaments_segmented(fils, segs)
 
-@njit
-def mutual_segmented_segmented(pts1, pts2):
-    Avecs = np.zeros_like(pts2)
-    for i in range(pts1.shape[0] - 1):
-        xyz = pts1[i]
-        uvw = pts1[i+1]-pts1[i]
-        Avecs += ASegment(pts2,xyz,uvw)
-    A_midps = (Avecs[1:]+Avecs[:-1])/2
-    deltas = pts2[1:]-pts2[:-1]
-    dots = deltas[:,0]*A_midps[:,0] + deltas[:,1]*A_midps[:,1] + deltas[:,2]*A_midps[:,2]
-    return np.sum(dots)
+
+def M_path_path(pts1,pts2, ds1=0, ds2=0):
+    """Mutual inductance between two pts paths"""
+    segs1, _ = segment_path(pts1,ds1)
+    segs2, _ = segment_path(pts2,ds2)
+    return _segmented_segmented_mutual(segs1,segs2)
+
 
 @njit(parallel=True)
 def segmented_self_inductance(pts, s, a):

@@ -4,7 +4,7 @@ import unittest
 
 import coverage_env  # noqa: F401
 
-from inductance.filaments import mutual_inductance_fil,_loop_segmented_mutual,mutual_segmented_segmented
+from inductance.filaments import mutual_inductance_fil,_loop_segmented_mutual,M_path_path
 from numpy import array,dstack,linspace,ones_like,sin,cos,pi
 
 class TestMutual(unittest.TestCase):
@@ -44,9 +44,9 @@ class TestMutual(unittest.TestCase):
         self.assertAlmostEqual(coaxial_path_sol,self.coaxial_analytic_sol,places=11)
 
     def test_mutual_path_path(self):
-        """Test filaments.mutual_segmented_segmented"""
-        coplanar_path_sol = mutual_segmented_segmented(self.coplanar_fil1_path,self.coplanar_fil2_path)
-        coaxial_path_sol = mutual_segmented_segmented(self.coaxial_fil1_path,self.coaxial_fil2_path)
+        """Test filaments.M_path_path"""
+        coplanar_path_sol = M_path_path(self.coplanar_fil1_path,self.coplanar_fil2_path)
+        coaxial_path_sol = M_path_path(self.coaxial_fil1_path,self.coaxial_fil2_path)
         
         self.assertAlmostEqual(coplanar_path_sol,self.coplanar_analytic_sol,places=10)
         self.assertAlmostEqual(coaxial_path_sol,self.coaxial_analytic_sol,places=10)
