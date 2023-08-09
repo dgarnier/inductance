@@ -1,4 +1,4 @@
-"""Test filamentation and inducatance of LDX coils."""
+"""Test filamentation and inductance of LDX coils."""
 
 import unittest
 
