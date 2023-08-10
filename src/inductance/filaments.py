@@ -105,21 +105,21 @@ def ASegment(pts, xyz, uvw):
     Returns:
         array: Psi at pts in Weber / Amp, N x (Psix,Psiy,Psiz)
     """
-    mu02pi = 2e-7 #mu_0/2pi in H/m
-    L = math.sqrt(uvw[0]**2+uvw[1]**2+uvw[2]**2)
-    _uvw = uvw/L
-    diffs = pts[:]-xyz
-    zs = uvw[0]*diffs[:,0] + uvw[1]*diffs[:,1] + uvw[2]*diffs[:,2]
-    zvecs = zs[:,None]*_uvw
-    rhovecs = diffs-zvecs
-    rhos = np.sqrt(rhovecs[:,0]**2+rhovecs[:,1]**2+rhovecs[:,2]**2)/L
+    mu02pi = 2e-7  # mu_0/2pi in H/m
+    L = math.sqrt(uvw[0] ** 2 + uvw[1] ** 2 + uvw[2] ** 2)
+    _uvw = uvw / L
+    diffs = pts[:] - xyz
+    zs = uvw[0] * diffs[:, 0] + uvw[1] * diffs[:, 1] + uvw[2] * diffs[:, 2]
+    zvecs = zs[:, None] * _uvw
+    rhovecs = diffs - zvecs
+    rhos = np.sqrt(rhovecs[:, 0] ** 2 + rhovecs[:, 1] ** 2 + rhovecs[:, 2] ** 2) / L
     zs /= L
 
-    ris = np.sqrt(rhos**2+zs**2)
-    rfs = np.sqrt(rhos**2+(1-zs)**2)
-    epsilons = 1/(ris+rfs)
+    ris = np.sqrt(rhos**2 + zs**2)
+    rfs = np.sqrt(rhos**2 + (1 - zs) ** 2)
+    epsilons = 1 / (ris + rfs)
 
-    return mu02pi*np.arctanh(epsilons)[:,None]*_uvw
+    return mu02pi * np.arctanh(epsilons)[:, None] * _uvw
 
 
 @njit
@@ -240,12 +240,17 @@ def _segmented_segmented_mutual(pts1, pts2):
     Avecs = np.zeros_like(pts2)
     for i in range(pts1.shape[0] - 1):
         xyz = pts1[i]
-        uvw = pts1[i+1]-pts1[i]
-        Avecs += ASegment(pts2,xyz,uvw)
-    A_midps = (Avecs[1:]+Avecs[:-1])/2
-    deltas = pts2[1:]-pts2[:-1]
-    dots = deltas[:,0]*A_midps[:,0] + deltas[:,1]*A_midps[:,1] + deltas[:,2]*A_midps[:,2]
+        uvw = pts1[i + 1] - pts1[i]
+        Avecs += ASegment(pts2, xyz, uvw)
+    A_midps = (Avecs[1:] + Avecs[:-1]) / 2
+    deltas = pts2[1:] - pts2[:-1]
+    dots = (
+        deltas[:, 0] * A_midps[:, 0]
+        + deltas[:, 1] * A_midps[:, 1]
+        + deltas[:, 2] * A_midps[:, 2]
+    )
     return np.sum(dots)
+
 
 @njit(parallel=True)
 def mutual_filaments_segmented(fils, pts):
@@ -262,11 +267,11 @@ def M_filsol_path(fils, pts, nt, ds=0):
     return nt * mutual_filaments_segmented(fils, segs)
 
 
-def M_path_path(pts1,pts2, ds1=0, ds2=0):
+def M_path_path(pts1, pts2, ds1=0, ds2=0):
     """Mutual inductance between two pts paths"""
-    segs1, _ = segment_path(pts1,ds1)
-    segs2, _ = segment_path(pts2,ds2)
-    return _segmented_segmented_mutual(segs1,segs2)
+    segs1, _ = segment_path(pts1, ds1)
+    segs2, _ = segment_path(pts2, ds2)
+    return _segmented_segmented_mutual(segs1, segs2)
 
 
 @njit(parallel=True)
