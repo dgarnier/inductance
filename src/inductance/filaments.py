@@ -95,6 +95,7 @@ def AGreen(r, z, a, b):
 @njit
 def ASegment(pts, xyz, uvw):
     """Psi at positions pts, due to a linear current segment uvw located at xyz.
+
     Derived from https://doi.org/10.1016/j.cpc.2023.108692, Eq. 20
 
     Args:
@@ -268,7 +269,7 @@ def M_filsol_path(fils, pts, nt, ds=0):
 
 
 def M_path_path(pts1, pts2, ds1=0, ds2=0):
-    """Mutual inductance between two pts paths"""
+    """Mutual inductance between two pts paths."""
     segs1, _ = segment_path(pts1, ds1)
     segs2, _ = segment_path(pts2, ds2)
     return _segmented_segmented_mutual(segs1, segs2)

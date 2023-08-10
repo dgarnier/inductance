@@ -1,4 +1,4 @@
-"""Test the mutual inductance of filaments and paths"""
+"""Test the mutual inductance of filaments and paths."""
 
 import unittest
 
@@ -13,9 +13,10 @@ from inductance.filaments import (
 
 
 class TestMutual(unittest.TestCase):
-    """Test and compare mutual inductance of filaments and paths"""
+    """Test and compare mutual inductance of filaments and paths."""
 
     def setUp(self) -> None:
+        """Set up the test data."""
         self.coplanar_fil1 = array([1, 10, 1])
         self.coplanar_fil2 = array([100, 10, 1])
         t = linspace(0, 2 * pi, 10000)
@@ -44,7 +45,7 @@ class TestMutual(unittest.TestCase):
         return super().setUp()
 
     def test_mutual_fil_fil(self):
-        """Test filaments.mutual_inductance_fil"""
+        """Test filaments.mutual_inductance_fil."""
         coplanar_filaments_sol = mutual_inductance_fil(
             self.coplanar_fil1, self.coplanar_fil2
         )
@@ -60,7 +61,7 @@ class TestMutual(unittest.TestCase):
         )
 
     def test_mutual_fil_path(self):
-        """Test filaments._loop_segmented_mutual"""
+        """Test filaments._loop_segmented_mutual."""
         coplanar_path_sol = _loop_segmented_mutual(
             *self.coplanar_fil1[:2], self.coplanar_fil2_path
         )
@@ -72,7 +73,7 @@ class TestMutual(unittest.TestCase):
         self.assertAlmostEqual(coaxial_path_sol, self.coaxial_analytic_sol, places=11)
 
     def test_mutual_path_path(self):
-        """Test filaments.M_path_path"""
+        """Test filaments.M_path_path."""
         coplanar_path_sol = M_path_path(
             self.coplanar_fil1_path, self.coplanar_fil2_path
         )
