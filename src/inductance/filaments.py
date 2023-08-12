@@ -93,6 +93,37 @@ def AGreen(r, z, a, b):
 
 
 @njit
+def ASegment(pts, xyz, uvw):
+    """Psi at positions pts, due to a linear current segment uvw located at xyz.
+
+    Derived from https://doi.org/10.1016/j.cpc.2023.108692, Eq. 20
+
+    Args:
+        pts (array): coordinates to calculate vector potential at, N x (x,y,z)
+        xyz (array): coordinates of base of current element (x,y,z)
+        uvw (array): displacement vector for length of element
+
+    Returns:
+        array: Psi at pts in Weber / Amp, N x (Psix,Psiy,Psiz)
+    """
+    mu02pi = 2e-7  # mu_0/2pi in H/m
+    L = math.sqrt(uvw[0] ** 2 + uvw[1] ** 2 + uvw[2] ** 2)
+    _uvw = uvw / L
+    diffs = pts[:] - xyz
+    zs = uvw[0] * diffs[:, 0] + uvw[1] * diffs[:, 1] + uvw[2] * diffs[:, 2]
+    zvecs = zs[:, None] * _uvw
+    rhovecs = diffs - zvecs
+    rhos = np.sqrt(rhovecs[:, 0] ** 2 + rhovecs[:, 1] ** 2 + rhovecs[:, 2] ** 2) / L
+    zs /= L
+
+    ris = np.sqrt(rhos**2 + zs**2)
+    rfs = np.sqrt(rhos**2 + (1 - zs) ** 2)
+    epsilons = 1 / (ris + rfs)
+
+    return mu02pi * np.arctanh(epsilons)[:, None] * _uvw
+
+
+@njit
 def BrGreen(r, z, a, b):
     """Br at position r, z, due to a filament with radius a, and z postion b.
 
@@ -190,8 +221,8 @@ def segment_path(pts, ds=0, close=False):
 
 @njit
 def _loop_segmented_mutual(r, z, pts):
-    # segments is array of n x 3 (x,y,z)
-    # segments should contain first point at start AND end.
+    # pts is array of n x 3 (x,y,z)
+    # pts should contain first point at start AND end.
     # r, z is r & z of loop
     M = float(0)
     for i in range(pts.shape[0] - 1):
@@ -199,10 +230,27 @@ def _loop_segmented_mutual(r, z, pts):
         delta = pts[i, :] - pts[i + 1, :]
         rs = math.sqrt(midp[0] ** 2 + midp[1] ** 2)
         zs = midp[2]
-        rdphi = (delta[0] * midp[1] - delta[1] * midp[0]) / rs
+        rdphi = (delta[0] * midp[1] - delta[1] * midp[0]) / rs**2
         M += AGreen(r, z, rs, zs) * rdphi
 
     return M
+
+
+@njit
+def _segmented_segmented_mutual(pts1, pts2):
+    Avecs = np.zeros_like(pts2)
+    for i in range(pts1.shape[0] - 1):
+        xyz = pts1[i]
+        uvw = pts1[i + 1] - pts1[i]
+        Avecs += ASegment(pts2, xyz, uvw)
+    A_midps = (Avecs[1:] + Avecs[:-1]) / 2
+    deltas = pts2[1:] - pts2[:-1]
+    dots = (
+        deltas[:, 0] * A_midps[:, 0]
+        + deltas[:, 1] * A_midps[:, 1]
+        + deltas[:, 2] * A_midps[:, 2]
+    )
+    return np.sum(dots)
 
 
 @njit(parallel=True)
@@ -214,10 +262,17 @@ def mutual_filaments_segmented(fils, pts):
     return M
 
 
-def M_filsol_path(fil, pts, nt, ds=0):
+def M_filsol_path(fils, pts, nt, ds=0):
     """Mutual inductance between a set of axisymmetric filaments and a path from pts."""
     segs, _ = segment_path(pts, ds)
-    return nt * mutual_filaments_segmented(fil, segs)
+    return nt * mutual_filaments_segmented(fils, segs)
+
+
+def M_path_path(pts1, pts2, ds1=0, ds2=0):
+    """Mutual inductance between two pts paths."""
+    segs1, _ = segment_path(pts1, ds1)
+    segs2, _ = segment_path(pts2, ds2)
+    return _segmented_segmented_mutual(segs1, segs2)
 
 
 @njit(parallel=True)
