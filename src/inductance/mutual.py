@@ -4,6 +4,7 @@ author: Darren Garnier <garnier@mit.edu>
 
 
 """
+
 import math
 
 import numpy as np

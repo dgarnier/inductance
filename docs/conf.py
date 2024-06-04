@@ -1,4 +1,5 @@
 """Sphinx configuration."""
+
 project = "Inductance"
 author = "Darren Garnier"
 copyright = "2023, Darren Garnier"

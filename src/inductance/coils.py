@@ -8,6 +8,7 @@ old Mathematica routines and other tests.
 Filaments are defined as an numpy 3 element vector
  - r, z, and n.
 """
+
 from __future__ import annotations
 
 import math

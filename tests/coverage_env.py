@@ -1,4 +1,5 @@
 """Disable Numba JIT when running coverage."""
+
 import os
 
 COVERAGE = os.getenv("COVERAGE_RUN", "")

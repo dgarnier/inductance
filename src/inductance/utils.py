@@ -2,6 +2,7 @@
 
 This module contains utility functions for inductance calculations.
 """
+
 import math
 
 import numpy as np

@@ -19,9 +19,10 @@ numba = "^0.57"
 
 [tool.poetry.group.dev.dependencies]
 mpmath = "^1.0.0"
-poetry = "^1.5.1"
+poetry = "^1.8.3"
+poetry-plugin-export = "^1.8.0"
 nox = "^2023.4.22"
-nox-poetry = "^1.0.0"
+nox-poetry = "^1.0.3"
 dunamai = "^1.17.0"
 Pygments = ">=2.10.0"
 black = ">=21.10b0"
