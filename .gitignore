@@ -12,3 +12,4 @@ venv
 __pycache__/
 src/inductance/_version.py
 new_dipole.py
+.DS_Store
