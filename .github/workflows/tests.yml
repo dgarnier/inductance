@@ -97,10 +97,11 @@ jobs:
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
-        uses: "actions/upload-artifact@v4"
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-data
           path: ".coverage.*"
+          overwrite: True
 
       - name: Upload documentation
         if: matrix.session == 'docs-build'
@@ -108,6 +109,7 @@ jobs:
         with:
           name: docs
           path: docs/_build
+          overwrite: True
 
   coverage:
     runs-on: ubuntu-latest
