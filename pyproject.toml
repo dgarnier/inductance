@@ -1,3 +1,8 @@
+[build-system]
+requires = ["poetry-core>=1.9"]
+build-backend = "poetry.core.masonry.api"
+
+
 [tool.poetry]
 name = "inductance"
 version = "0.1.4"
@@ -13,9 +18,9 @@ documentation = "https://inductance.readthedocs.io"
 Changelog = "https://github.com/dgarnier/inductance/releases"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-numpy = "^1.24"
-numba = "^0.57"
+python = "^3.9"
+numpy = "^1.26"
+numba = "^0.59"
 
 [tool.poetry.group.dev.dependencies]
 mpmath = "^1.0.0"
@@ -49,18 +54,6 @@ typeguard = ">=2.13.3"
 xdoctest = {extras = ["colors"], version = ">=0.15.10"}
 myst-parser = {version = ">=0.16.1"}
 
-[build-system]
-requires = ["poetry-core>=1.6.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.black]
-extend-exclude = '''
-( src/elliptics.py )
-'''
-
-[tool.isort]
-profile = "black"
-
 [tool.mypy]
 mypy_path = "stubs"
 pretty = true
@@ -79,3 +72,52 @@ source = ["inductance", "tests"]
 [tool.coverage.report]
 show_missing = true
 fail_under = 50
+
+[tool.ruff]
+force-exclude = true  # make sure we exclude below when running pre-commit
+extend-exclude = ["src/elliptics.py"]
+show-fixes = true
+
+[tool.ruff.lint]
+extend-select = [
+  "B",           # flake8-bugbear
+  "I",           # isort
+  "ARG",         # flake8-unused-arguments
+  "C4",          # flake8-comprehensions
+#  "EM",          # flake8-errmsg
+  "ICN",         # flake8-import-conventions
+  "G",           # flake8-logging-format
+  "PGH",         # pygrep-hooks
+  "PIE",         # flake8-pie
+  "PL",          # pylint
+  "PT",          # flake8-pytest-style
+  "PTH",         # flake8-use-pathlib
+  "RET",         # flake8-return
+  "RUF",         # Ruff-specific
+  "SIM",         # flake8-simplify
+#  "T20",         # flake8-print
+  "UP",          # pyupgrade
+  "YTT",         # flake8-2020
+  "EXE",         # flake8-executable
+  "NPY",         # NumPy specific rules
+  "PD",          # pandas-vet
+  "PYI",         # flake8-pyi
+]
+ignore = [
+  "PLR09",    # Too many <...>
+  "PLR2004",  # Magic comparison
+  "ISC001",   # Conflicts with formatter
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"  # Accepts: "google", "numpy", or "pep257".
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["T20"]
+
+# don't actually use isort.. use ruff instead
+[tool.isort]
+profile = "black"
+
+[tool.codespell]
+ignore-words-list = ["garnier"]
