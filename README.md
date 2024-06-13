@@ -1,20 +1,21 @@
 # Inductance
 
-[![PyPI](https://img.shields.io/pypi/v/inductance.svg)][pypi status]
-[![Status](https://img.shields.io/pypi/status/inductance.svg)][pypi status]
-[![Python Version](https://img.shields.io/pypi/pyversions/inductance)][pypi status]
+[![PyPI](https://img.shields.io/pypi/v/inductance.svg)][pypi]
+[![Status](https://img.shields.io/pypi/status/inductance.svg)][pypi]
+[![Python Version](https://img.shields.io/pypi/pyversions/inductance)][pypi]
 [![License](https://img.shields.io/pypi/l/inductance)][license]
 [![Read the documentation at https://inductance.readthedocs.io/](https://img.shields.io/readthedocs/inductance/latest.svg?label=Read%20the%20Docs)][read the docs]
 [![Tests](https://github.com/dgarnier/inductance/workflows/Tests/badge.svg)][tests]
 [![Codecov](https://codecov.io/gh/dgarnier/inductance/branch/main/graph/badge.svg)][codecov]
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)][ruff]
-[pypi status]: https://pypi.org/project/inductance/
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)][Ruff]
+
+[pypi]: https://pypi.org/project/inductance/
 [read the docs]: https://inductance.readthedocs.io/
 [tests]: https://github.com/dgarnier/inductance/actions?workflow=Tests
 [codecov]: https://app.codecov.io/gh/dgarnier/inductance
 [pre-commit]: https://github.com/pre-commit/pre-commit
-[ruff]: https://github.com/astral-sh/ruff
+[Ruff]: https://github.com/astral-sh/ruff
 
 This is a python library to calculate inductance. Mostly for the purposes of calcualting magnetically confined plasmas. It might someday actually contain some plasma physics, but lets not get too carried away.
 
