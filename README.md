@@ -8,14 +8,13 @@
 [![Tests](https://github.com/dgarnier/inductance/workflows/Tests/badge.svg)][tests]
 [![Codecov](https://codecov.io/gh/dgarnier/inductance/branch/main/graph/badge.svg)][codecov]
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
-[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
-
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)][ruff]
 [pypi status]: https://pypi.org/project/inductance/
 [read the docs]: https://inductance.readthedocs.io/
 [tests]: https://github.com/dgarnier/inductance/actions?workflow=Tests
 [codecov]: https://app.codecov.io/gh/dgarnier/inductance
 [pre-commit]: https://github.com/pre-commit/pre-commit
-[black]: https://github.com/psf/black
+[ruff]: https://github.com/astral-sh/ruff
 
 This is a python library to calculate inductance. Mostly for the purposes of calcualting magnetically confined plasmas. It might someday actually contain some plasma physics, but lets not get too carried away.
 
