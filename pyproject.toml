@@ -1,58 +1,83 @@
 [build-system]
-requires = ["poetry-core>=1.9"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-
-[tool.poetry]
+[project]
 name = "inductance"
 version = "0.1.5"
 description = "Code for 2D inductance calculations"
-authors = ["Darren Garnier <dgarnier@reinrag.net>"]
-license = "MIT"
+authors = [{ name = "Darren Garnier", email = "dgarnier@reinrag.net" }]
+requires-python = ">=3.10,<3.14"
 readme = "README.md"
-homepage = "https://github.com/dgarnier/inductance"
-repository = "https://github.com/dgarnier/inductance"
-documentation = "https://inductance.readthedocs.io"
+license = { file = "LICENSE" }
+keywords = ["inductance", "electromagnetism", "physics"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",]
+dependencies = [
+    "numpy>=1.24,<2.2",  # matches numba requirement
+    "numba==0.61",
+]
 
-[tool.poetry.urls]
+[project.urls]
+Homepage = "https://github.com/dgarnier/inductance"
+Repository = "https://github.com/dgarnier/inductance"
+Documentation = "https://inductance.readthedocs.io"
 Changelog = "https://github.com/dgarnier/inductance/releases"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-numpy = "^1.26"
-numba = "^0.59"
+[dependency-groups]
+  pre-commit = [
+    "bandit",
+    "darglint",
+    "flake8",
+    "flake8-bugbear",
+    "flake8-docstrings",
+    "flake8-rst-docstrings",
+    "pep8-naming",
+    "pre-commit",
+    "pre-commit-hooks",
+    "pyupgrade",
+    "ruff",
+    "safety>=1.10.3,<3",
+  ]
 
-[tool.poetry.group.dev.dependencies]
-mpmath = "^1.0.0"
-poetry = "^1.8.3"
-poetry-plugin-export = "^1.8.0"
-nox = "^2023.4.22"
-nox-poetry = "^1.0.3"
-dunamai = "^1.17.0"
-Pygments = ">=2.10.0"
-black = ">=21.10b0"
-coverage = {extras = ["toml"], version = ">=6.2"}
-darglint = ">=1.8.1"
-flake8 = ">=4.0.1"
-flake8-bandit = ">=2.1.2"
-flake8-bugbear = ">=21.9.2"
-flake8-docstrings = ">=1.6.0"
-flake8-rst-docstrings = ">=0.2.5"
-furo = ">=2021.11.12"
-isort = ">=5.12.0"
-mypy = ">=0.930"
-pep8-naming = ">=0.12.1"
-pre-commit = "^3.3.3"
-pre-commit-hooks = ">=4.1.0"
-pytest = ">=6.2.5"
-pyupgrade = ">=2.29.1"
-safety = ">=1.10.3"
-sphinx = ">=4.3.2"
-sphinx-autobuild = ">=2021.3.14"
-sphinx-click = ">=3.0.2"
-typeguard = ">=2.13.3"
-xdoctest = {extras = ["colors"], version = ">=0.15.10"}
-myst-parser = {version = ">=0.16.1"}
+  dev = [
+    "mpmath>=1.0.0,<2",
+    "nox>=2025,<2026",
+    "dunamai>=1.17.0,<2",
+    "Pygments>=2.10.0",
+    "coverage[toml]>=6.2",
+    "darglint>=1.8.1",
+    "flake8>=7.1",
+    "flake8-bandit>=2.1.2",
+    "flake8-bugbear>=21.9.2",
+    "flake8-docstrings>=1.6.0",
+    "flake8-rst-docstrings>=0.2.5",
+    "mypy>=1.11",
+    "pep8-naming>=0.12.1",
+    "pre-commit>=3.3.3,<4",
+    "pre-commit-hooks>=4.1.0",
+    "pytest>=6.2.5",
+    "pyupgrade>=2.29.1",
+    "typeguard>=2.13.3",
+    "xdoctest[colors]>=0.15.10",
+    "bump-my-version>=1.1.1",
+  ]
+
+  docs = [
+    "furo>=2024.8.6",
+    "myst-parser>=4.0.0",
+    "sphinx>8.0,<=8.2",
+    "sphinx-autobuild>=2024.10.3",
+    "sphinx-click>=5",
+  ]
 
 [tool.mypy]
 mypy_path = "stubs"
@@ -114,10 +139,6 @@ convention = "numpy"  # Accepts: "google", "numpy", or "pep257".
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["T20"]
-
-# don't actually use isort.. use ruff instead
-[tool.isort]
-profile = "black"
 
 [tool.codespell]
 ignore-words-list = ["garnier"]
