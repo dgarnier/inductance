@@ -60,20 +60,23 @@ dev = [
     "flake8-bugbear>=21.9.2",
     "flake8-docstrings>=1.6.0",
     "flake8-rst-docstrings>=0.2.5",
-    "furo>=2021.11.12",
-    "mypy>=0.930",
+    "mypy>=1.11",
     "pep8-naming>=0.12.1",
     "pre-commit>=3.3.3,<4",
     "pre-commit-hooks>=4.1.0",
     "pytest>=6.2.5",
     "pyupgrade>=2.29.1",
-    "sphinx>=4.3.2",
-    "sphinx-autobuild>=2021.3.14",
-    "sphinx-click>=3.0.2",
     "typeguard>=2.13.3",
     "xdoctest[colors]>=0.15.10",
-    "myst-parser>=0.16.1",
     "bump-my-version>=1.1.1",
+]
+
+docs = [
+  "furo>=2024.8.6",
+  "myst-parser>=4.0.0",
+  "sphinx>6.0,<=8.2",
+  "sphinx-autobuild>=2024.10.3",
+  "sphinx-click>=5",
 ]
 
 [tool.mypy]

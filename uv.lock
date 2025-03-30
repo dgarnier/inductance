@@ -548,10 +548,8 @@ dev = [
     { name = "flake8-bugbear" },
     { name = "flake8-docstrings" },
     { name = "flake8-rst-docstrings" },
-    { name = "furo" },
     { name = "mpmath" },
     { name = "mypy" },
-    { name = "myst-parser" },
     { name = "nox" },
     { name = "pep8-naming" },
     { name = "pre-commit" },
@@ -559,11 +557,15 @@ dev = [
     { name = "pygments" },
     { name = "pytest" },
     { name = "pyupgrade" },
+    { name = "typeguard" },
+    { name = "xdoctest", extra = ["colors"] },
+]
+docs = [
+    { name = "furo" },
+    { name = "myst-parser" },
     { name = "sphinx" },
     { name = "sphinx-autobuild" },
     { name = "sphinx-click" },
-    { name = "typeguard" },
-    { name = "xdoctest", extra = ["colors"] },
 ]
 pre-commit = [
     { name = "bandit" },
@@ -597,10 +599,8 @@ dev = [
     { name = "flake8-bugbear", specifier = ">=21.9.2" },
     { name = "flake8-docstrings", specifier = ">=1.6.0" },
     { name = "flake8-rst-docstrings", specifier = ">=0.2.5" },
-    { name = "furo", specifier = ">=2021.11.12" },
     { name = "mpmath", specifier = ">=1.0.0,<2" },
-    { name = "mypy", specifier = ">=0.930" },
-    { name = "myst-parser", specifier = ">=0.16.1" },
+    { name = "mypy", specifier = ">=1.11" },
     { name = "nox", specifier = ">=2025,<2026" },
     { name = "pep8-naming", specifier = ">=0.12.1" },
     { name = "pre-commit", specifier = ">=3.3.3,<4" },
@@ -608,11 +608,15 @@ dev = [
     { name = "pygments", specifier = ">=2.10.0" },
     { name = "pytest", specifier = ">=6.2.5" },
     { name = "pyupgrade", specifier = ">=2.29.1" },
-    { name = "sphinx", specifier = ">=4.3.2" },
-    { name = "sphinx-autobuild", specifier = ">=2021.3.14" },
-    { name = "sphinx-click", specifier = ">=3.0.2" },
     { name = "typeguard", specifier = ">=2.13.3" },
     { name = "xdoctest", extras = ["colors"], specifier = ">=0.15.10" },
+]
+docs = [
+    { name = "furo", specifier = ">=2024.8.6" },
+    { name = "myst-parser", specifier = ">=4.0.0" },
+    { name = "sphinx", specifier = ">6.0,<=8.2" },
+    { name = "sphinx-autobuild", specifier = ">=2024.10.3" },
+    { name = "sphinx-click", specifier = ">=5" },
 ]
 pre-commit = [
     { name = "bandit" },

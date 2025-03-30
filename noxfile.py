@@ -210,8 +210,9 @@ def docs_build(session: Session) -> None:
     if not session.posargs and "FORCE_COLOR" in os.environ:
         args.insert(0, "--color")
 
+    pyproject = nox.project.load_toml("pyproject.toml")
     session.install(".")
-    session.install("sphinx", "sphinx-click", "furo", "myst-parser")
+    session.install(*nox.project.dependency_groups(pyproject, "docs"))
 
     build_dir = Path("docs", "_build")
     if build_dir.exists():
