@@ -81,13 +81,13 @@ jobs:
 
       - name: Run Nox
         run: |
-          uv run nox --python=${{ matrix.python }}
+          uv run --python ${{ matrix.python }} nox --python=${{ matrix.python }}
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-data-${{ matrix.python}}-${{ matrix.os }}
+          name: coverage-data-${{ matrix.python }}-${{ matrix.os }}
           path: ".coverage.*"
 
       - name: Upload documentation
@@ -109,8 +109,6 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
 
       - name: Install project
         run: |
@@ -133,4 +131,4 @@ jobs:
       - name: Upload coverage report
         uses: codecov/codecov-action@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: g${{ secrets.CODECOV_TOKEN }}
