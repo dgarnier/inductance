@@ -8,21 +8,10 @@ from pathlib import Path
 from textwrap import dedent
 
 import nox
-
-try:
-    from nox_poetry import Session, session
-except ImportError:
-    message = f"""\
-    Nox failed to import the 'nox-poetry' package.
-
-    Please install it using the following command:
-
-    {sys.executable} -m pip install nox-poetry"""
-    raise SystemExit(dedent(message)) from None
-
+from nox import Session, session
 
 package = "inductance"
-python_versions = ["3.12", "3.11", "3.10", "3.9"]
+python_versions = ["3.13", "3.12", "3.11", "3.10"]
 nox.needs_version = ">= 2021.6.6"
 nox.options.sessions = (
     "pre-commit",
@@ -140,15 +129,23 @@ def precommit(session: Session) -> None:
 @session(python=python_versions[0])
 def safety(session: Session) -> None:
     """Scan dependencies for insecure packages."""
-    requirements = session.poetry.export_requirements()
+    # requirements = session.poetry.export_requirements()
     session.install("safety")
+    session.run(
+        "uv",
+        "export",
+        "--no-dev",
+        "--format=requirements-txt",
+        "--output-file",
+        "requirements.txt",
+    )
     session.run(
         "safety",
         "check",
         "--policy-file",
         ".safety-check-policy.yml",
         "--full-report",
-        f"--file={requirements}",
+        "--file=requirements.txt",
     )
 
 
