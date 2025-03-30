@@ -41,13 +41,13 @@ repos:
         stages: [commit, push, manual]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.4.8"
+    rev: v0.11.2
     hooks:
       - id: ruff
-        args: [--fix, --show-fixes]
-        types: [python]
+        types_or: [python]
+        args: [--fix]
       - id: ruff-format
-        types: [python]
+        types_or: [python]
 
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
@@ -73,10 +73,6 @@ repos:
         language: system
         types: [python]
         args: [--py39-plus]
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
-    hooks:
-      - id: prettier
   - repo: https://github.com/codespell-project/codespell
     rev: "v2.3.0" # Use the latest version which adds inline ignore support
     hooks:
