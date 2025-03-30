@@ -141,7 +141,7 @@ def safety(session: Session) -> None:
         "--full-report",
         "--file=.tmp.requirements.txt",
     )
-    session.run("rm", "-f", ".tmp.requirements.txt", external=True)
+    session.run("rm", ".tmp.requirements.txt", external=True)
 
 
 @session(python=python_versions)
