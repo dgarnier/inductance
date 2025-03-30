@@ -10,9 +10,13 @@ from textwrap import dedent
 import nox
 from nox import Session, session
 
+# let nox know that we are using the `uv` backend
+# for venv, which will download python versions as needed
+nox.options.default_venv_backend = "uv|virtualenv"
+
 package = "inductance"
 python_versions = ["3.13", "3.12", "3.11", "3.10"]
-nox.needs_version = ">= 2021.6.6"
+nox.needs_version = ">= 2025.02.09"
 nox.options.sessions = (
     "pre-commit",
     "safety",
@@ -84,7 +88,8 @@ def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
         text = hook.read_text()
 
         if not any(
-            Path("A") == Path("a") and bindir.lower() in text.lower() or bindir in text
+            (Path("A") == Path("a") and bindir.lower() in text.lower())
+            or bindir in text
             for bindir in bindirs
         ):
             continue
@@ -107,20 +112,8 @@ def precommit(session: Session) -> None:
         "--hook-stage=manual",
         "--show-diff-on-failure",
     ]
-    session.install(
-        "bandit",
-        "black",
-        "darglint",
-        "flake8",
-        "flake8-bugbear",
-        "flake8-docstrings",
-        "flake8-rst-docstrings",
-        "isort",
-        "pep8-naming",
-        "pre-commit",
-        "pre-commit-hooks",
-        "pyupgrade",
-    )
+    pyproject = nox.project.load_toml("pyproject.toml")
+    session.install(*nox.project.dependency_groups(pyproject, "pre-commit"))
     session.run("pre-commit", *args)
     if args and args[0] == "install":
         activate_virtualenv_in_precommit_hooks(session)
@@ -129,15 +122,16 @@ def precommit(session: Session) -> None:
 @session(python=python_versions[0])
 def safety(session: Session) -> None:
     """Scan dependencies for insecure packages."""
-    # requirements = session.poetry.export_requirements()
-    session.install("safety")
+    session.install("safety>=2.0.0,<3.0.0")
     session.run(
         "uv",
         "export",
+        "-q",
         "--no-dev",
         "--format=requirements-txt",
+        "--no-hashes",
         "--output-file",
-        "requirements.txt",
+        ".tmp.requirements.txt",
     )
     session.run(
         "safety",
@@ -145,8 +139,9 @@ def safety(session: Session) -> None:
         "--policy-file",
         ".safety-check-policy.yml",
         "--full-report",
-        "--file=requirements.txt",
+        "--file=.tmp.requirements.txt",
     )
+    session.run("rm", "-f", ".tmp.requirements.txt", external=True)
 
 
 @session(python=python_versions)

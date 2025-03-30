@@ -33,12 +33,26 @@ Documentation = "https://inductance.readthedocs.io"
 Changelog = "https://github.com/dgarnier/inductance/releases"
 
 [dependency-groups]
+  pre-commit = [
+    "bandit",
+    "darglint",
+    "flake8",
+    "flake8-bugbear",
+    "flake8-docstrings",
+    "flake8-rst-docstrings",
+    "pep8-naming",
+    "pre-commit",
+    "pre-commit-hooks",
+    "pyupgrade",
+    "ruff",
+    "safety>=1.10.3,<3",
+  ]
+
 dev = [
     "mpmath>=1.0.0,<2",
-    "nox>=2023.4.22,<2024",
+    "nox>=2025,<2026",
     "dunamai>=1.17.0,<2",
     "Pygments>=2.10.0",
-    "black>=21.10b0",
     "coverage[toml]>=6.2",
     "darglint>=1.8.1",
     "flake8>=4.0.1",
@@ -47,14 +61,12 @@ dev = [
     "flake8-docstrings>=1.6.0",
     "flake8-rst-docstrings>=0.2.5",
     "furo>=2021.11.12",
-    "isort>=5.12.0",
     "mypy>=0.930",
     "pep8-naming>=0.12.1",
     "pre-commit>=3.3.3,<4",
     "pre-commit-hooks>=4.1.0",
     "pytest>=6.2.5",
     "pyupgrade>=2.29.1",
-    "safety>=1.10.3,<3",
     "sphinx>=4.3.2",
     "sphinx-autobuild>=2021.3.14",
     "sphinx-click>=3.0.2",
@@ -124,9 +136,6 @@ convention = "numpy"  # Accepts: "google", "numpy", or "pep257".
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["T20"]
-
-[tool.isort]
-profile = "black"
 
 [tool.codespell]
 ignore-words-list = ["garnier"]
