@@ -51,7 +51,7 @@ jobs:
 
       - name: Install the project using uv
         run: |
-          uv sync --all-extras --dev
+          uv sync --all-extras --group dev
 
       - name: Compute pre-commit cache key
         if: matrix.session == 'pre-commit'
@@ -81,7 +81,7 @@ jobs:
 
       - name: Run Nox
         run: |
-          nox --python=${{ matrix.python }}
+          uv run nox --python=${{ matrix.python }}
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
@@ -114,7 +114,7 @@ jobs:
 
       - name: Install project
         run: |
-          uv sync --all-extras --dev
+          uv sync --all-extras --group dev
 
       - name: Download coverage data
         uses: actions/download-artifact@v4
@@ -124,11 +124,11 @@ jobs:
 
       - name: Combine coverage data and display human readable report
         run: |
-          nox --session=coverage
+          uv run nox --session=coverage
 
       - name: Create coverage report
         run: |
-          nox --session=coverage -- xml
+          uv run nox --session=coverage -- xml
 
       - name: Upload coverage report
         uses: codecov/codecov-action@v4

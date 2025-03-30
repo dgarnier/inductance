@@ -22,7 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",]
 dependencies = [
-    "numpy>=1.24,<=2.1",  # matches numba requirement
+    "numpy>=1.24,<2.2",  # matches numba requirement
     "numba==0.61",
 ]
 
