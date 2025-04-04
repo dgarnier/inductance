@@ -42,6 +42,7 @@ jobs:
         with:
           version-command: |
             uv run --only-dev bump-my-version show current_version
+            
       - name: Bump version for developmental release
         if: "! steps.check-version.outputs.tag"
         run: |
