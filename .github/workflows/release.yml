@@ -50,7 +50,7 @@ jobs:
 
       - name: Build package
         run: |
-          uv build --all-extras --group dev
+          uv build --wheel --sdist --group dev --group docs
 
       - name: Publish package on PyPI
         if: steps.check-version.outputs.tag
