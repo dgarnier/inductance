@@ -30,12 +30,6 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
 
-      - name: Upgrade pip
-        run: |
-          pip install --constraint=.github/workflows/constraints.txt pip
-          pip --version
-
-
       - name: Check if there is a parent commit
         id: check-parent-commit
         run: |
@@ -47,11 +41,11 @@ jobs:
         uses: salsify/action-detect-and-tag-new-version@v2.0.3
         with:
           version-command: |
-            bump-my-version show current_version
+            uv run --only-dev bump-my-version show current_version
       - name: Bump version for developmental release
         if: "! steps.check-version.outputs.tag"
         run: |
-          bump-my-version bump patch
+          uv run --only-dev bump-my-version bump patch
 
       - name: Build package
         run: |
