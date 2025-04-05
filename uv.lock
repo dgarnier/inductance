@@ -531,7 +531,7 @@ wheels = [
 
 [[package]]
 name = "inductance"
-version = "0.1.6.dev0"
+version = "0.1.6rc0"
 source = { editable = "." }
 dependencies = [
     { name = "numba" },

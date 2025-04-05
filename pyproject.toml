@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "inductance"
-version = "0.1.6-dev0"
+version = "0.1.6-rc0"
 description = "Code for 2D inductance calculations"
 authors = [{ name = "Darren Garnier", email = "dgarnier@reinrag.net" }]
 requires-python = ">=3.10,<3.14"
@@ -144,7 +144,7 @@ convention = "numpy"  # Accepts: "google", "numpy", or "pep257".
 ignore-words-list = ["garnier"]
 
 [tool.bumpversion]
-current_version = "0.1.6-dev0"
+current_version = "0.1.6-rc0"
 parse = """(?x)
     (?P<major>0|[1-9]\\d*)\\.
     (?P<minor>0|[1-9]\\d*)\\.
