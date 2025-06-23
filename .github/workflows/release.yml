@@ -44,7 +44,7 @@ jobs:
             uv run --only-dev bump-my-version show current_version
 
       - name: Bump version for developmental release
-        if: "! steps.check-version.outputs.tag"
+        if: ${{ ! steps.check-version.outputs.tag }}
         run: |
           uv run --only-dev bump-my-version bump patch
 
@@ -57,7 +57,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@v1.12.4
 
       - name: Publish package on TestPyPI
-        if: "! steps.check-version.outputs.tag"
+        if: ${{ ! steps.check-version.outputs.tag }}
         uses: pypa/gh-action-pypi-publish@v1.12.4
         with:
           repository-url: https://test.pypi.org/legacy/
