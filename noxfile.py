@@ -16,7 +16,7 @@ nox.options.default_venv_backend = "uv|virtualenv"
 
 package = "inductance"
 python_versions = ["3.13", "3.12", "3.11", "3.10"]
-nox.needs_version = ">= 2025.02.09"
+nox.needs_version = ">= 2025"
 nox.options.sessions = (
     "pre-commit",
     "safety",
