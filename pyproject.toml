@@ -20,10 +20,10 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",]
+    "Programming Language :: Python :: 3.13"]
 dependencies = [
-    "numpy>=1.24,<2.2",  # matches numba requirement
-    "numba==0.61",
+    "numpy>=1.24,<2.3", # matches numba requirement
+    "numba>=0.61.2", # for numpy 2.2
 ]
 
 [project.urls]
