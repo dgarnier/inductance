@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10, <3.14"
 resolution-markers = [
     "python_full_version >= '3.11'",
@@ -374,7 +374,7 @@ name = "exceptiongroup"
 version = "1.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/0b/9f/a65090624ecf468cdca03533906e7c69ed7588582240cfe7cc9e770b50eb/exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88", size = 29749, upload-time = "2025-05-10T17:42:51.123Z" }
 wheels = [
@@ -445,16 +445,16 @@ wheels = [
 
 [[package]]
 name = "flake8-rst-docstrings"
-version = "0.3.1"
+version = "0.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flake8" },
     { name = "pygments" },
     { name = "restructuredtext-lint" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/18/d6/a3e5f86f984d6d8caa1705deffdae84c710e594ab5c1985e26c5e1bb05db/flake8_rst_docstrings-0.3.1.tar.gz", hash = "sha256:26dcc1338caf985990677696a8a6a274f73a0c6845b85f567befd3b648db78e2", size = 12867, upload-time = "2025-04-29T11:34:56.437Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bd/21/fb4422e5160438b1766b0d52558ef6d5db4f161b1f2b50fc414ed63ea9d1/flake8_rst_docstrings-0.4.0.tar.gz", hash = "sha256:a885cccfac9ff9b1e6d062ac0f8ba79a63fd0cf0fdcf220a5e3d7e6378acc7d0", size = 13097, upload-time = "2025-10-06T17:55:10.536Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/a7/ef9a2b35987d4d4b2b6213891915d0d7242ccc034861dec63540b81f3a13/flake8_rst_docstrings-0.3.1-py3-none-any.whl", hash = "sha256:ed831afca7ee47851e2162d5fa726b823b446fd46085c2164d7979ae5d9a96d7", size = 11049, upload-time = "2025-04-29T11:34:54.861Z" },
+    { url = "https://files.pythonhosted.org/packages/c0/f4/091b997ef3f356a218e1bb346184f154c6b6371f1bf569c04d565236ddc0/flake8_rst_docstrings-0.4.0-py3-none-any.whl", hash = "sha256:f0fe9027af48ef84550bd641eedfbd58a35d182014d372dcb0321535e5face3a", size = 11288, upload-time = "2025-10-06T17:55:09.104Z" },
 ]
 
 [[package]]
