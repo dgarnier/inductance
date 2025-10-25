@@ -53,7 +53,7 @@ jobs:
       - name: Compute pre-commit cache key
         if: matrix.session == 'pre-commit'
         id: pre-commit-cache
-        shell: uv run python
+        shell: uv run python {0}
         run: |
           import hashlib
           import sys
