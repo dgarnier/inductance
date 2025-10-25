@@ -53,7 +53,7 @@ jobs:
       - name: Compute pre-commit cache key
         if: matrix.session == 'pre-commit'
         id: pre-commit-cache
-        shell: uv run --python ${{ matrix.python }} python
+        shell: uv run python
         run: |
           import hashlib
           import sys
@@ -78,7 +78,7 @@ jobs:
 
       - name: Run Nox
         run: |
-          uv run --python ${{ matrix.python }} nox --python=${{ matrix.python }}
+          uv run nox
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
