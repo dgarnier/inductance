@@ -24,6 +24,9 @@ classifiers = [
 dependencies = [
     "numpy>=1.24,<2.3", # matches numba requirement
     "numba>=0.61.2", # for numpy 2.2
+    "pre-commit>=3.8.0",
+    "click>=8.2.1",
+    "docutils>=0.21.2",
 ]
 
 [project.urls]
@@ -62,14 +65,16 @@ Changelog = "https://github.com/dgarnier/inductance/releases"
     "flake8-rst-docstrings>=0.2.5",
     "mypy>=1.11",
     "pep8-naming>=0.12.1",
-    "pre-commit>=3.3.3,<4",
+    "pre-commit>=3.8",
     "pre-commit-hooks>=4.1.0",
     "pytest>=6.2.5",
     "pyupgrade>=2.29.1",
     "typeguard>=2.13.3",
     "xdoctest[colors]>=0.15.10",
-    "bump-my-version>=1.1.1",
-  ]
+    "bump-my-version>=1.2.4",
+    "docutils>=0.21.2",
+    "markdown-it-py>=3.0.0",
+]
 
   docs = [
     "furo>=2024.8.6",
