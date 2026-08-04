@@ -24,13 +24,13 @@ def mutual_rayleigh(r1, z1, dr1, dz1, n1, r2, z2, dr2, dz2, n2):
     Bull. Natl. Bur. Stand., vol 8, no. 1, p. 34-35; 1911.
 
     Args:
-        r1 (float): inner radius of coil 1
-        z1 (float): inner height of coil 1
+        r1 (float): radial center of coil 1
+        z1 (float): vertical center of coil 1
         dr1 (float): radial width of coil 1
         dz1 (float): height of coil 1
         n1 (int): number of turns in coil 1
-        r2 (float): inner radius of coil 2
-        z2 (float): inner height of coil 2
+        r2 (float): radial center of coil 2
+        z2 (float): vertical center of coil 2
         dr2 (float): radial width of coil 2
         dz2 (float): height of coil 2
         n2 (int): number of turns in coil 2
@@ -86,8 +86,8 @@ def lyle_equivalent_filaments(r, z, dr, dz, nt, fils):
         Bull. Natl. Bur. Stand., vol 8, no. 1, p. 38-39; 1911.
 
     Args:
-        r (float): inner radius of coil
-        z (float): inner height of coil
+        r (float): radial center of coil
+        z (float): vertical center of coil
         dr (float): radial width of coil
         dz (float): height of coil
         nt (float): number of turns in coil
@@ -125,13 +125,13 @@ def mutual_lyles_method(r1, z1, dr1, dz1, nt1, r2, z2, dr2, dz2, nt2):
     Bull. Natl. Bur. Stand., vol 8, no. 1, p. 38-39; 1911.
 
     Args:
-        r1 (float): inner radius of coil 1
-        z1 (float): inner height of coil 1
+        r1 (float): radial center of coil 1
+        z1 (float): vertical center of coil 1
         dr1 (float): radial width of coil 1
         dz1 (float): height of coil 1
         nt1 (int): number of turns in coil 1
-        r2 (float): inner radius of coil 2
-        z2 (float): inner height of coil 2
+        r2 (float): radial center of coil 2
+        z2 (float): vertical center of coil 2
         dr2 (float): radial width of coil 2
         dz2 (float): height of coil 2
         nt2 (int): number of turns in coil 2
@@ -165,15 +165,15 @@ def mutual_sectioning_lyle(
     of subcoil using Lyle's method of equivalent filaments.
 
     Args:
-        r1 (float): inner radius of coil 1
-        z1 (float): inner height of coil 1
+        r1 (float): radial center of coil 1
+        z1 (float): vertical center of coil 1
         dr1 (float): radial width of coil 1
         dz1 (float): height of coil 1
         nt1 (float): number of turns in coil 1
         nr1 (int): number of radial sections in coil 1
         nz1 (int): number of vertical sections in coil 1
-        r2 (float): inner radius of coil 2
-        z2 (float): inner height of coil 2
+        r2 (float): radial center of coil 2
+        z2 (float): vertical center of coil 2
         dr2 (float): radial width of coil 2
         dz2 (float): height of coil 2
         nt2 (float): number of turns in coil 2
