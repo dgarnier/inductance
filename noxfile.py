@@ -17,7 +17,7 @@ nox.options.default_venv_backend = "uv|virtualenv"
 package = "inductance"
 python_versions = ["3.14", "3.13", "3.12", "3.11", "3.10"]
 nox.needs_version = ">= 2026"
-nox.options.sessions = (
+nox.options.sessions = [
     "pre-commit",
     "safety",
     "mypy",
@@ -25,7 +25,7 @@ nox.options.sessions = (
     "typeguard",
     "xdoctest",
     "docs-build",
-)
+]
 
 
 def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
