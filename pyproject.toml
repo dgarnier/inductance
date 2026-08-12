@@ -7,7 +7,7 @@ name = "inductance"
 version = "0.1.7"
 description = "Code for 2D inductance calculations"
 authors = [{ name = "Darren Garnier", email = "dgarnier@reinrag.net" }]
-requires-python = ">=3.10,<3.15"
+requires-python = ">=3.11,<3.15"
 readme = "README.md"
 license = { file = "LICENSE" }
 keywords = ["inductance", "electromagnetism", "physics"]
@@ -17,15 +17,16 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13"]
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14"
+]
 dependencies = [
-    "numpy>=1.24,<2.3", # matches numba requirement
-    "numba>=0.61.2", # for numpy 2.2
-    "pre-commit>=3.8.0",
-    "click>=8.2.1",
+    "numpy>=2.3",    # matches numba requirement
+    "numba>=0.63.0", # for python 3.14
+    "pre-commit>=4.6",
+    "click>=8.4",
     "docutils>=0.21.2",
 ]
 
