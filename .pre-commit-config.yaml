@@ -11,7 +11,7 @@ repos:
         require_serial: true
         args: ["-c", "bandit.yml"]
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
         name: Check for added large files
