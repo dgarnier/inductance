@@ -1,7 +1,10 @@
 name: Tests
 
 on:
+  # Only main on push: an unfiltered push trigger runs the whole matrix a
+  # second time for every branch that also has a pull request open.
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
