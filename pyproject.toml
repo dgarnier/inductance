@@ -7,7 +7,7 @@ name = "inductance"
 version = "0.1.8"
 description = "Code for 2D inductance calculations"
 authors = [{ name = "Darren Garnier", email = "dgarnier@reinrag.net" }]
-requires-python = ">=3.11,<3.15"
+requires-python = ">=3.11"
 readme = "README.md"
 license = { file = "LICENSE" }
 keywords = ["inductance", "electromagnetism", "physics"]
@@ -21,14 +21,22 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14"
+    # 3.15 is tested (unaccelerated, since numba has no wheels for it) but is
+    # deliberately not claimed here until it is out of rc and numba declares
+    # support for it.
 ]
 dependencies = [
-    "numpy>=2.3",    # matches numba requirement
-    "numba>=0.63.0", # for python 3.14
-    "pre-commit>=4.6",
-    "click>=8.4",
-    "docutils>=0.21.2",
+    "numpy>=2.3", # matches numba requirement
+    # Numba is the default accelerator, but it lags new Python releases.  The
+    # marker keeps it from blocking installation on a Python it doesn't
+    # support yet; there the pure python fallbacks in _numba.py take over.
+    "numba>=0.63.0; python_version < '3.15'",
 ]
+
+[project.optional-dependencies]
+# Ask for acceleration explicitly on a Python newer than the marker above,
+# once numba supports it: pip install "inductance[numba]"
+numba = ["numba>=0.63.0"]
 
 [project.urls]
 Homepage = "https://github.com/dgarnier/inductance"

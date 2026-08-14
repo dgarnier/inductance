@@ -14,29 +14,10 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-added-large-files
-        name: Check for added large files
-        entry: check-added-large-files
-        language: system
       - id: check-toml
-        name: Check Toml
-        entry: check-toml
-        language: system
-        types: [toml]
       - id: check-yaml
-        name: Check Yaml
-        entry: check-yaml
-        language: system
-        types: [yaml]
       - id: end-of-file-fixer
-        name: Fix End of Files
-        entry: end-of-file-fixer
-        language: system
-        types: [text]
       - id: trailing-whitespace
-        name: Trim Trailing Whitespace
-        entry: trailing-whitespace-fixer
-        language: system
-        types: [text]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.2
@@ -50,12 +31,7 @@ repos:
     rev: v3.21.2
     hooks:
       - id: pyupgrade
-        name: pyupgrade
-        description: Automatically upgrade syntax for newer versions.
-        entry: pyupgrade
-        language: system
-        types: [python]
-        args: [--py39-plus]
+        args: [--py311-plus] # matches requires-python in pyproject.toml
   - repo: https://github.com/codespell-project/codespell
     rev: "v2.4.3" # Use the latest version which adds inline ignore support
     hooks:

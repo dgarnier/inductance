@@ -16,6 +16,12 @@ nox.options.default_venv_backend = "uv|virtualenv"
 
 package = "inductance"
 python_versions = ["3.14", "3.13", "3.12", "3.11"]
+
+# Numba has no wheels for 3.15 yet, so installing there leaves it out and the
+# pure python fallbacks take over.  Run the test suite on it anyway: it is the
+# only place that exercises the library with numba genuinely absent.  Sessions
+# that need one interpreter stay on python_versions[0], which is released.
+test_python_versions = ["3.15", *python_versions]
 nox.needs_version = ">= 2026"
 nox.options.sessions = [
     "pre-commit",
@@ -155,7 +161,7 @@ def mypy(session: Session) -> None:
         session.run("mypy", f"--python-executable={sys.executable}", "noxfile.py")
 
 
-@session(python=python_versions)
+@session(python=test_python_versions)
 def tests(session: Session) -> None:
     """Run the test suite."""
     session.install(".")
