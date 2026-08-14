@@ -13,6 +13,8 @@ jobs:
   tests:
     name: ${{ matrix.session }} ${{ matrix.python }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    # Entries marked experimental report their result without failing the run.
+    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
       fail-fast: false
       matrix:
@@ -26,8 +28,10 @@ jobs:
           - { python: "3.11", os: "ubuntu-latest", session: "tests" }
           - { python: "3.14", os: "ubuntu-latest", session: "tests" }
           # numba has no 3.15 wheels yet, so this runs with numba absent and is
-          # the only job covering the pure python fallbacks
-          - { python: "3.15", os: "ubuntu-latest", session: "tests" }
+          # the only job covering the pure python fallbacks.  3.15 is still an
+          # rc: report it, don't block on it.  Drop experimental once 3.15 is
+          # released and numba supports it.
+          - { python: "3.15", os: "ubuntu-latest", session: "tests", experimental: true }
           - { python: "3.13", os: "windows-latest", session: "tests" }
           - { python: "3.14", os: "macos-latest", session: "tests" }
           - { python: "3.13", os: "ubuntu-latest", session: "typeguard" }

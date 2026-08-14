@@ -21,6 +21,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14"
+    # 3.15 is tested (unaccelerated, since numba has no wheels for it) but is
+    # deliberately not claimed here until it is out of rc and numba declares
+    # support for it.
 ]
 dependencies = [
     "numpy>=2.3", # matches numba requirement
