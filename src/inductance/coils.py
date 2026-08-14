@@ -106,8 +106,7 @@ class Coil:
         """Create a coil from a dictionary."""
         if "r1" in d:
             return cls.from_bounds(**d)
-        else:
-            return cls(**d)
+        return cls(**d)
 
     @classmethod
     def from_bounds(cls, r1, r2, z1, z2, nt=1, at=1, nr=0, nz=0):
@@ -117,31 +116,31 @@ class Coil:
         )
 
     @property
-    def r1(self):  # noqa: D102
+    def r1(self):
         return self.r - self.dr / 2
 
     @property
-    def r2(self):  # noqa: D102
+    def r2(self):
         return self.r + self.dr / 2
 
     @property
-    def z1(self):  # noqa: D102
+    def z1(self):
         return self.z - self.dz / 2
 
     @property
-    def z2(self):  # noqa: D102
+    def z2(self):
         return self.z + self.dz / 2
 
     @property
-    def r_c(self):  # noqa: D102
+    def r_c(self):
         return self.r if self._r_c is None else self._r_c
 
     @property
-    def z_c(self):  # noqa: D102
+    def z_c(self):
         return self.z if self._z_c is None else self._z_c
 
     @property
-    def conductor_length(self):  # noqa: D102
+    def conductor_length(self):
         return self.r * self.nt * 2 * math.pi
 
     def L_best(self):
@@ -150,11 +149,10 @@ class Coil:
             # Lyle's formula is not valid for long coils
             # as its an expansion in dz/r
             return self.L_Lyle6()
-        else:
-            return self.L_filament()
+        return self.L_filament()
 
     @property
-    def L(self):  # noqa: D102
+    def L(self):
         if self._L is None:
             self._L = self.L_best()
         return self._L
@@ -199,14 +197,15 @@ class Coil:
                 dr=self.dr / self.nr,
                 dz=self.dz / self.nz,
             )
-        elif "round" in cond.shape.value:
+        if "round" in cond.shape.value:
             return self_inductance_by_filaments(
                 self.fils, conductor=cond.shape.name, a=cond.r
             )
-        elif "rect" in cond.shape.value:
+        if "rect" in cond.shape.value:
             return self_inductance_by_filaments(
                 self.fils, conductor=cond.shape.name, dr=cond.dr, dz=cond.dz
             )
+        raise ValueError(f"Unsupported conductor shape: {cond.shape}")
 
     def L_long_solenoid_butterworth(self):
         """Inductance by Butterworth's formula."""
@@ -262,7 +261,7 @@ class CompositeCoil(Coil):
         self.fils = np.concatenate([coil.fils for coil in coils])
 
     @property
-    def conductor_length(self):  # noqa: D102
+    def conductor_length(self):
         return sum(coil.conductor_length for coil in self.coils)
 
     def L_best(self):

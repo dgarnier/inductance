@@ -147,7 +147,7 @@ convention = "numpy"  # Accepts: "google", "numpy", or "pep257".
 "tests/**" = ["T20"]
 
 [tool.codespell]
-ignore-words-list = ["garnier"]
+ignore-words-list = ["garnier", "fils"]
 
 [tool.bumpversion]
 current_version = "0.1.8"

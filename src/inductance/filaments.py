@@ -26,8 +26,8 @@ def mutual_inductance_fil(rzn1, rzn2):
     k2 = 4 * r1 * r2 / ((r1 + r2) ** 2 + (z1 - z2) ** 2)
     elk, ele = ellipke(k2)
     amp = 2 * math.pi * r1 * 4e-7 * r2 / math.sqrt((r1 + r2) ** 2 + (z1 - z2) ** 2)
-    M0 = n1 * n2 * amp * ((2 - k2) * elk - 2 * ele) / k2
-    return M0
+    # M0, the mutual inductance of the two filaments
+    return n1 * n2 * amp * ((2 - k2) * elk - 2 * ele) / k2
 
 
 @njit
@@ -45,8 +45,8 @@ def vertical_force_fil(rzn1, rzn2):
     r2, z2, n2 = rzn2
 
     BrAt1 = BrGreen(r1, z1, r2, z2)
-    F = n1 * n2 * 2 * math.pi * r1 * BrAt1
-    return F
+    # F, the vertical force from the radial field at filament 1
+    return n1 * n2 * 2 * math.pi * r1 * BrAt1
 
 
 @njit
@@ -64,8 +64,8 @@ def radial_force_fil(rzn1, rzn2):
     r2, z2, n2 = rzn2
 
     BzAt1 = BzGreen(r1, z1, r2, z2)
-    F = n1 * n2 * 2 * math.pi * r1 * BzAt1
-    return F
+    # F, the radial force from the vertical field at filament 1
+    return n1 * n2 * 2 * math.pi * r1 * BzAt1
 
 
 #
@@ -75,7 +75,7 @@ def radial_force_fil(rzn1, rzn2):
 
 @njit
 def AGreen(r, z, a, b):
-    """Psi at position r, z, due to a filament with radius a, and z postion b.
+    """Psi at position r, z, due to a filament with radius a, and z position b.
 
     Args:
         r (float): radial position of a point
@@ -125,7 +125,7 @@ def ASegment(pts, xyz, uvw):
 
 @njit
 def BrGreen(r, z, a, b):
-    """Br at position r, z, due to a filament with radius a, and z postion b.
+    """Br at position r, z, due to a filament with radius a, and z position b.
 
     Args:
         r (float): radial position of a point
@@ -145,7 +145,7 @@ def BrGreen(r, z, a, b):
 
 @njit
 def BzGreen(r, z, a, b):
-    """Bz at position r, z, due to a filament with radius a, and z postion b.
+    """Bz at position r, z, due to a filament with radius a, and z position b.
 
     Args:
         r (float): radial position of a point
@@ -192,7 +192,7 @@ def segment_path(pts, ds=0, close=False):
 
     Args:
         pts (array): N x 3 array of points
-        ds (float, optional): length between points. Defaults to minimun in pts.
+        ds (float, optional): length between points. Defaults to minimum in pts.
         close (bool, optional): Should the path close the points. Defaults to False.
 
     Returns:
@@ -327,8 +327,8 @@ def L_approx_path_rect(pts, w, h, n, ds=1):
     a = rectangle_GMD(w, h)  # get Maxwell mean radius to approximate "wire" radius
     ds *= a
     segs, s = segment_path(pts, ds)
-    L = n**2 * segmented_self_inductance(segs, s, a)
-    return L
+    # L, the self inductance of the n-turn path
+    return n**2 * segmented_self_inductance(segs, s, a)
 
 
 # for some reason, these are slightly slower than the above.
@@ -396,7 +396,7 @@ def AGreenFil(fil, r, z, gr):
         gr[j] = tmp
 
 
-# cant jit this... meshgrid not allowed
+# can't jit this... meshgrid not allowed
 def filament_coil(r, z, dr, dz, nt, nr, nz, theta=0):
     """Create an array of filaments, each with its own radius, height, and amperage.
 

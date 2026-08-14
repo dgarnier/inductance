@@ -3,6 +3,7 @@
 import unittest
 
 import coverage_env  # noqa: F401
+import pytest
 from numpy import array, cos, dstack, linspace, ones_like, pi, sin
 
 from inductance.filaments import (
@@ -53,11 +54,11 @@ class TestMutual(unittest.TestCase):
             self.coaxial_fil1, self.coaxial_fil2
         )
 
-        self.assertAlmostEqual(
-            self.coplanar_analytic_sol, coplanar_filaments_sol, places=11
+        assert coplanar_filaments_sol == pytest.approx(
+            self.coplanar_analytic_sol, abs=5e-12
         )
-        self.assertAlmostEqual(
-            self.coaxial_analytic_sol, coaxial_filaments_sol, places=11
+        assert coaxial_filaments_sol == pytest.approx(
+            self.coaxial_analytic_sol, abs=5e-12
         )
 
     def test_mutual_fil_path(self):
@@ -69,8 +70,8 @@ class TestMutual(unittest.TestCase):
             *self.coaxial_fil1[:2], self.coaxial_fil2_path
         )
 
-        self.assertAlmostEqual(coplanar_path_sol, self.coplanar_analytic_sol, places=11)
-        self.assertAlmostEqual(coaxial_path_sol, self.coaxial_analytic_sol, places=11)
+        assert coplanar_path_sol == pytest.approx(self.coplanar_analytic_sol, abs=5e-12)
+        assert coaxial_path_sol == pytest.approx(self.coaxial_analytic_sol, abs=5e-12)
 
     def test_mutual_path_path(self):
         """Test filaments.M_path_path."""
@@ -79,8 +80,8 @@ class TestMutual(unittest.TestCase):
         )
         coaxial_path_sol = M_path_path(self.coaxial_fil1_path, self.coaxial_fil2_path)
 
-        self.assertAlmostEqual(coplanar_path_sol, self.coplanar_analytic_sol, places=10)
-        self.assertAlmostEqual(coaxial_path_sol, self.coaxial_analytic_sol, places=10)
+        assert coplanar_path_sol == pytest.approx(self.coplanar_analytic_sol, abs=5e-11)
+        assert coaxial_path_sol == pytest.approx(self.coaxial_analytic_sol, abs=5e-11)
 
 
 if __name__ == "__main__":

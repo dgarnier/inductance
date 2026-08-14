@@ -14,7 +14,7 @@ Lyle, T. R.  "On the Self-inductance of Circular Coils of
 Unfortunately, Lyle doesn't work that well with large dz/R coils.  Other
 approximations are also included.
 
-This code now uses numba to do just-in-time compiliation and parallel execution
+This code now uses numba to do just-in-time compilation and parallel execution
 to greatly increase speed. Also requires numba-scipy for elliptical functions.
 numba-scipy can be fragile and sometimes needs to be "updated" before installation
 to the newest version of numba.
@@ -49,9 +49,9 @@ def L_maxwell(r, dr, dz, n):
     a = float(r)
     b = float(dz)
     c = float(dr)
-    d, u, v, w, wp, phi, GMD = _lyle_terms(b, c)
-    L = MU0 * (n**2) * a * (math.log(8 * a / GMD) - 2)
-    return L
+    _d, _u, _v, _w, _wp, _phi, GMD = _lyle_terms(b, c)
+    # L, from Maxwell's formula using the GMD of the section
+    return MU0 * (n**2) * a * (math.log(8 * a / GMD) - 2)
 
 
 @njit
@@ -66,8 +66,8 @@ def L_round(r, a, n):
     Returns:
         float: coil self inductance in Henrys
     """
-    L = MU0 * (n**2) * r * (math.log(8 * r / a) - 1.75)
-    return L
+    # L, for a round conductor with uniform current density
+    return MU0 * (n**2) * r * (math.log(8 * r / a) - 1.75)
 
 
 @njit
@@ -82,8 +82,8 @@ def L_hollow_round(r, a, n):
     Returns:
         float: coil self inductance in Henrys
     """
-    L = MU0 * (n**2) * r * (math.log(8 * r / a) - 2)
-    return L
+    # L, for a round conductor carrying only skin current
+    return MU0 * (n**2) * r * (math.log(8 * r / a) - 2)
 
 
 @njit
@@ -102,7 +102,7 @@ def L_lyle4(r, dr, dz, n):
     a = float(r)
     b = float(dz)
     c = float(dr)
-    d, u, v, w, wp, phi, GMD = _lyle_terms(b, c)
+    d, u, v, w, _wp, phi, GMD = _lyle_terms(b, c)
     p2 = 1 / (2**5 * 3 * d**2) * (3 * b**2 + c**2)
     q2 = (
         1
@@ -133,13 +133,12 @@ def L_lyle4(r, dr, dz, n):
 
     # equation #3
 
-    eq3 = (
+    return (
         MU0
         * (n**2)
         * a
         * (ML - 2 + (d / a) ** 2 * (p2 * ML + q2) + (d / a) ** 4 * (p4 * ML + q4))
     )
-    return eq3
 
 
 # equation 4.. slightly different result... not sure which is better.
@@ -167,7 +166,7 @@ def L_lyle4_eq4(r, dr, dz, n):
     a = float(r)
     b = float(dz)
     c = float(dr)
-    d, u, v, w, wp, phi, GMD = _lyle_terms(b, c)
+    d, u, v, w, _wp, phi, GMD = _lyle_terms(b, c)
     p2 = 1 / (2**5 * 3 * d**2) * (3 * b**2 + c**2)
     q2 = (
         1
@@ -203,8 +202,8 @@ def L_lyle4_eq4(r, dr, dz, n):
     A = a * (1 + m1 * (d / a) ** 2 + m2 * (d / a) ** 4)
     R = GMD * (1 + n1 * (d / a) ** 2 + n2 * (d / a) ** 4 + n3 * (d / a) ** 6)
 
-    eq4 = MU0 * (n**2) * A * (np.log(8 * A / R) - 2)
-    return eq4
+    # equation #4
+    return MU0 * (n**2) * A * (np.log(8 * A / R) - 2)
 
 
 @njit
@@ -223,7 +222,7 @@ def L_lyle6(r, dr, dz, n):
     a = float(r)
     b = float(dz)
     c = float(dr)
-    d, u, v, w, ww, phi, GMD = _lyle_terms(b, c)
+    d, u, v, w, ww, _phi, _GMD = _lyle_terms(b, c)
     bd2 = (b / d) ** 2
     cd2 = (c / d) ** 2
     da2 = (d / a) ** 2
@@ -261,9 +260,9 @@ def L_lyle6(r, dr, dz, n):
         )
         / 1.73408256e10  # 6th order
     )
-    L = MU0 * (n**2) * a * f
-    # print("Lyle6 r: %.4g, dr: %.4g, dz: %4g, n: %d, L: %.8g"%(a,c,b,n,L))
-    return L
+    # print("Lyle6 r: %.4g, dr: %.4g, dz: %4g, n: %d"%(a,c,b,n))
+    # L, to 6th order in d/a
+    return MU0 * (n**2) * a * f
 
 
 @njit
@@ -282,7 +281,7 @@ def dLdR_lyle6(r, dr, dz, n):
     a = float(r)
     b = float(dz)
     c = float(dr)
-    d, u, v, w, ww, phi, GMD = _lyle_terms(b, c)
+    d, u, v, w, ww, _phi, _GMD = _lyle_terms(b, c)
     bd2 = (b / d) ** 2
     cd2 = (c / d) ** 2
     da2 = (d / a) ** 2
@@ -321,8 +320,8 @@ def dLdR_lyle6(r, dr, dz, n):
         / 3.46816512e9  # 6th order
     )
 
-    dLdR = 4e-7 * np.pi * (n**2) * f
-    return dLdR
+    # dLdR, the radial derivative of L to 6th order in d/a
+    return 4e-7 * np.pi * (n**2) * f
 
 
 @njit
@@ -341,7 +340,7 @@ def L_lyle6_appendix(r, dr, dz, n):
     a = float(r)
     b = float(dz)
     c = float(dr)
-    d, u, v, w, wp, phi, GMD = _lyle_terms(b, c)
+    d, u, v, w, _wp, _phi, _GMD = _lyle_terms(b, c)
 
     p6 = (
         1
@@ -363,12 +362,11 @@ def L_lyle6_appendix(r, dr, dz, n):
         )
     )
 
-    # just add the correction to the 4th order solution
-    L6 = L_lyle4(r, dr, dz, n) + 4e-7 * np.pi * (n**2) * a * (d / a) ** 6 * (
+    # L6, the 4th order solution plus the 6th order correction
+    # print("Lyle6A r: %.4g, dr: %.4g, dz: %4g, n: %d"%(a,c,b,n))
+    return L_lyle4(r, dr, dz, n) + 4e-7 * np.pi * (n**2) * a * (d / a) ** 6 * (
         p6 * np.log(8 * a / d) + q6
     )
-    # print("Lyle6A r: %.4g, dr: %.4g, dz: %4g, n: %d, L: %.8g"%(a,c,b,n,L6))
-    return L6
 
 
 @njit
@@ -500,8 +498,7 @@ def _L_thin_wall_babic_akyel(r, _dr, dz, n):
     elk, ele = ellipke(k2)
     k = np.sqrt(k2)
     tk1 = 4.0 / (3 * np.pi * beta * k**3) * ((2 * k2 - 1) * ele + (1 - k2) * elk - k**3)
-    eq8 = MU0 * (n**2) * r * np.pi / (2 * beta) * tk1  # eq 8
-    return eq8
+    return MU0 * (n**2) * r * np.pi / (2 * beta) * tk1  # eq 8
 
 
 @njit
@@ -531,8 +528,8 @@ def L_lorentz(r, _dr, dz, n):
     elK, elE = ellipke(k2)
 
     f = 2 / 3 / beta2 * (((2 * k2 - 1) * elE + (1 - k2) * elK) / k3 - 1)
-    Ls = MU0 * (n**2) * r * f
-    return Ls
+    # Ls, the thin wall solenoid self inductance
+    return MU0 * (n**2) * r * f
 
 
 @njit(parallel=True)

@@ -3,6 +3,7 @@
 import unittest
 
 import coverage_env  # noqa: F401
+import pytest
 
 from inductance.elliptics import celbd, ellipe, ellipk
 
@@ -42,15 +43,15 @@ class TestElliptics(unittest.TestCase):
         """Test the ellipke function."""
         for m, k, e in self.scipy_data:
             # this fails at the 15th place
-            self.assertAlmostEqual(ellipk(m), k, places=14)
-            self.assertAlmostEqual(ellipe(m), e, places=14)
+            assert ellipk(m) == pytest.approx(k, abs=5e-15)
+            assert ellipe(m) == pytest.approx(e, abs=5e-15)
 
     def test_celbd(self):
         """Test the celbd function. Which is to be compared with ellipkm1 in scipy.special."""
         mc = 1e-16
         b, d = celbd(mc)
         k = b + d
-        self.assertAlmostEqual(19.806975105072258, k, places=14)
+        assert k == pytest.approx(19.806975105072258, abs=5e-15)
 
 
 if __name__ == "__main__":
