@@ -52,11 +52,11 @@ This is a python library to calculate inductance. Mostly for the purposes of cal
 
 _Inductance_ requires [_NumPy_][numpy] and uses [_Numba_][numba] for acceleration. It is written in mostly pure python referencing academic articles for calculating inductances by various methods, most of which rely on elliptic functions. _Inductance_ provides _Numba_ accelerated pure python elliptic functions.
 
-It is possible to remove the dependence on Numba and get most of the functionality of _Inductance_. The plan is to provide different options, including with alternative accelerators, such as [_JAX_][jax]. For now, the requirements are:
+_Numba_ is optional, though it is installed by default. Without it, _Inductance_ falls back to pure python: everything still works, just slower, apart from the vectorized Green's function helpers (`BrGreenFil`, `BzGreenFil`, `AGreenFil`), which stay callable but are no longer generalized ufuncs, so they need an explicit output array. The plan is to provide different options, including with alternative accelerators, such as [_JAX_][jax]. The requirements are:
 
-- python >= 3.8
-- numpy >= 1.24
-- numba >= 0.57
+- python >= 3.11
+- numpy >= 2.3
+- numba >= 0.63 — optional, installed by default on any python _Numba_ supports
 
 [numba]: https://numba.readthedocs.io/
 [numpy]: https://numpy.org
@@ -69,6 +69,23 @@ You can install _inductance_ via [pip] from [PyPI]:
 ```console
 $ pip install inductance
 ```
+
+That installs _Numba_ too. On a python newer than _Numba_ supports, it is
+skipped automatically so the install still succeeds; once _Numba_ catches up,
+ask for it explicitly with:
+
+```console
+$ pip install "inductance[numba]"
+```
+
+To install without _Numba_ on a python that does support it:
+
+```console
+$ pip install --no-deps inductance numpy
+```
+
+If _Numba_ is installed but you want to bypass compilation — when debugging, or
+under coverage — set `NUMBA_DISABLE_JIT=1` in the environment instead.
 
 ## Reference
 

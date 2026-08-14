@@ -25,6 +25,9 @@ jobs:
           - { python: "3.12", os: "ubuntu-latest", session: "tests" }
           - { python: "3.11", os: "ubuntu-latest", session: "tests" }
           - { python: "3.14", os: "ubuntu-latest", session: "tests" }
+          # numba has no 3.15 wheels yet, so this runs with numba absent and is
+          # the only job covering the pure python fallbacks
+          - { python: "3.15", os: "ubuntu-latest", session: "tests" }
           - { python: "3.13", os: "windows-latest", session: "tests" }
           - { python: "3.14", os: "macos-latest", session: "tests" }
           - { python: "3.13", os: "ubuntu-latest", session: "typeguard" }
@@ -48,7 +51,10 @@ jobs:
 
       - name: Install the project using uv
         run: |
-          uv sync --all-extras --group dev
+          # Not --all-extras: the numba extra pins numba unconditionally, which
+          # cannot build on a python numba does not support yet.  Numba still
+          # installs by default everywhere it is available.
+          uv sync --group dev
 
       - name: Compute pre-commit cache key
         if: matrix.session == 'pre-commit'
@@ -107,7 +113,7 @@ jobs:
 
       - name: Install project
         run: |
-          uv sync --all-extras --group dev
+          uv sync --group dev
 
       - name: Download coverage data
         uses: actions/download-artifact@v8
