@@ -3,6 +3,7 @@
 import unittest
 
 import coverage_env  # noqa: F401
+import pytest
 
 from inductance.coils import Coil, CompositeCoil
 
@@ -28,24 +29,24 @@ class TestLDXInductance(unittest.TestCase):
 
     def test_self_inductances(self):
         """Test the self-inductances routines."""
-        self.assertAlmostEqual(self.LC.L_Maxwell(), 0.005397519485316731)
-        self.assertAlmostEqual(self.LC.L_Lyle4(), 0.005623887363536865)
-        self.assertAlmostEqual(self.LC.L_Lyle6(), 0.005626208118367906)
-        self.assertAlmostEqual(self.LC.L_Lyle6A(), 0.005626208118367906)
-        self.assertAlmostEqual(self.LC.L_filament(), 0.005625117051066614)
+        assert self.LC.L_Maxwell() == pytest.approx(0.005397519485316731, abs=5e-8)
+        assert self.LC.L_Lyle4() == pytest.approx(0.005623887363536865, abs=5e-8)
+        assert self.LC.L_Lyle6() == pytest.approx(0.005626208118367906, abs=5e-8)
+        assert self.LC.L_Lyle6A() == pytest.approx(0.005626208118367906, abs=5e-8)
+        assert self.LC.L_filament() == pytest.approx(0.005625117051066614, abs=5e-8)
 
-        self.assertAlmostEqual(self.CC.L_Maxwell(), 85.91637858501646)
-        self.assertAlmostEqual(self.CC.L_Lyle4(), 90.90254315310752)
-        self.assertAlmostEqual(self.CC.L_Lyle6(), 90.90927053789774)
-        self.assertAlmostEqual(self.CC.L_Lyle6A(), 90.90927053789773)
-        self.assertAlmostEqual(self.CC.L_filament(), 90.89118772211005)
+        assert self.CC.L_Maxwell() == pytest.approx(85.91637858501646, abs=5e-8)
+        assert self.CC.L_Lyle4() == pytest.approx(90.90254315310752, abs=5e-8)
+        assert self.CC.L_Lyle6() == pytest.approx(90.90927053789774, abs=5e-8)
+        assert self.CC.L_Lyle6A() == pytest.approx(90.90927053789773, abs=5e-8)
+        assert self.CC.L_filament() == pytest.approx(90.89118772211005, abs=5e-8)
 
     def test_mutual_inductances(self):
         """Test the mutual inductances routines."""
-        MFL = self.FC.M_filament(self.LC)
-        MFC = self.FC.M_filament(self.CC)
-        self.assertAlmostEqual(MFL, 0.611729e-3)
-        self.assertAlmostEqual(MFC, 1.686291576361124)
+        M_fc_lc = self.FC.M_filament(self.LC)
+        M_fc_cc = self.FC.M_filament(self.CC)
+        assert M_fc_lc == pytest.approx(0.611729e-3, abs=5e-8)
+        assert M_fc_cc == pytest.approx(1.686291576361124, abs=5e-8)
 
     def test_fcoil_selfinductance(self):
         """Test the self-inductance of the F coils."""
@@ -55,13 +56,13 @@ class TestLDXInductance(unittest.TestCase):
         MF12 = self.F1.M_filament(self.F2)
         MF13 = self.F1.M_filament(self.F3)
         MF23 = self.F2.M_filament(self.F3)
-        LFC = LF1 + LF2 + LF3 + 2 * MF12 + 2 * MF13 + 2 * MF23
-        self.assertAlmostEqual(LFC, 0.38692937382836284)
+        L_fcoil = LF1 + LF2 + LF3 + 2 * MF12 + 2 * MF13 + 2 * MF23
+        assert L_fcoil == pytest.approx(0.38692937382836284, abs=5e-8)
 
     def test_levitation_force(self):
         """Test the levitation force."""
-        FZ = self.FC.Fz_filament(self.LC) / 9.81
-        self.assertAlmostEqual(FZ, 589.263842397435)
+        Fz_kg = self.FC.Fz_filament(self.LC) / 9.81  # levitated mass in kg
+        assert Fz_kg == pytest.approx(589.263842397435, abs=5e-8)
 
 
 def define_ldx_coils():

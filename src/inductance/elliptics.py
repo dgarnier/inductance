@@ -4,7 +4,7 @@ Author: Fukushima, T. <Toshio.Fukushima@nao.ac.jp>
 
 Reference: Toshio Fukushima, "Precise and fast computation of a general incomplete
 elliptic integral of second kind by half and double argument transformations"
-Journal of Computational and Applied Mathematics 235 (2011) 4140–4148
+Journal of Computational and Applied Mathematics 235 (2011) 4140-4148
 DOI: https://doi.org/10.1090/S0025-5718-2011-02455-5
 
 With Numba, this runs ~10x faster than scipy.special if you need both k and e
@@ -12,7 +12,6 @@ so.. don't need numba_scipy which lags numba and scipy often.
 """
 
 from math import log
-from typing import Tuple
 
 from ._numba import njit
 
@@ -82,8 +81,8 @@ def celbd(mc):
         elb = 1.e0
         eld = 0.3862943611198906188344642429164e0 - 0.5e0 * log(mc)
     elif mc < 0.1:
-        nome=mc*(Q1+mc*(Q2+mc*(Q3+mc*(Q4+mc*(Q5+mc*(Q6      \
-            +mc*(Q7+mc*(Q8+mc*(Q9+mc*(Q10+mc*(Q11+mc*(Q12   \
+        nome=mc*(Q1+mc*(Q2+mc*(Q3+mc*(Q4+mc*(Q5+mc*(Q6  # codespell:ignore nome
+            +mc*(Q7+mc*(Q8+mc*(Q9+mc*(Q10+mc*(Q11+mc*(Q12
             +mc*(Q13+mc*(Q14+mc*(Q15+mc*Q16)))))))))))))))
         if mc < 0.01:
             dkkc = mc * (K1 + mc * (K2 + mc * (K3 + mc * (K4 + mc *
@@ -130,7 +129,7 @@ def celbd(mc):
                 ))))))))))))
 
         kkc = 1.e0 + dkkc
-        logq2 = -0.5e0 * log(nome)
+        logq2 = -0.5e0 * log(nome)  # codespell:ignore nome
         elk = kkc * logq2
         dele = -dkkc / kkc + logq2 * dddc
         elk1 = elk - 1.e0

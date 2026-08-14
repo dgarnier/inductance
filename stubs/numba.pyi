@@ -1,20 +1,18 @@
-"""Numba stubs.
-Copied from pandas.
-"""
+# Numba stubs.
+# Copied from pandas.
 
 # pyright: reportIncompleteStub = false
-from typing import TYPE_CHECKING, Any, Callable, Literal, TypeVar, overload
+from collections.abc import Callable
+from typing import Any, Literal, TypeAlias, TypeVar, overload
 
-if TYPE_CHECKING:
-    import numba
+import numba
 
-FuncType = Callable[..., Any]
-F = TypeVar("F", bound=FuncType)
-
+FuncType: TypeAlias = Callable[..., Any]
+_F = TypeVar("_F", bound=FuncType)
 
 def __getattr__(name: str) -> Any: ...  # incomplete
 @overload
-def jit(signature_or_function: F) -> F: ...
+def jit(signature_or_function: _F) -> _F: ...
 @overload
 def jit(
     signature_or_function: str
@@ -37,7 +35,7 @@ def jit(
     target: Literal["cpu", "gpu", "npyufunc", "cuda"] = ...,  # deprecated
     nogil: bool = ...,
     parallel: bool = ...,
-) -> Callable[[F], F]: ...
+) -> Callable[[_F], _F]: ...
 
 njit = jit
 generated_jit = jit

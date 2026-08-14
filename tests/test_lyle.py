@@ -4,6 +4,7 @@ import unittest
 
 import coverage_env  # noqa: F401
 import numpy as np
+import pytest
 
 from inductance.self import L_lorentz, L_lyle4, L_maxwell
 from inductance.utils import _lyle_terms
@@ -14,21 +15,21 @@ class TestSelfInductances(unittest.TestCase):
 
     def test_L_maxwell(self):
         """Test Maxwell's formula."""
-        self.assertAlmostEqual(L_maxwell(1, 1e-4, 1, 1), 20.7463e-7, places=6)
+        assert L_maxwell(1, 1e-4, 1, 1) == pytest.approx(20.7463e-7, abs=5e-7)
 
     def test_L_lorentz(self):
         """Test thin-wall Lorentz formula. See Lyle pg. 429."""
         mu0 = 4e-7 * np.pi
-        self.assertAlmostEqual(L_lorentz(1, 0.0, 2, 1) / mu0, 1.08137, places=5)
-        self.assertAlmostEqual(L_lorentz(1, 0.0, 1, 1), 20.7463e-7, places=6)
-        self.assertAlmostEqual(L_lorentz(1, 0.0, 0.5, 1), 28.85335e-7, places=7)
+        assert L_lorentz(1, 0.0, 2, 1) / mu0 == pytest.approx(1.08137, abs=5e-6)
+        assert L_lorentz(1, 0.0, 1, 1) == pytest.approx(20.7463e-7, abs=5e-7)
+        assert L_lorentz(1, 0.0, 0.5, 1) == pytest.approx(28.85335e-7, abs=5e-8)
 
     def test_L_lyle4(self):
         """Test Lyle's formula against Lorentz thin-wall. See Lyle pg. 429."""
         mu0 = 4e-7 * np.pi
-        self.assertAlmostEqual(L_lyle4(1, 1e-6, 2, 1) / mu0, 1.07970, places=3)
-        self.assertAlmostEqual(L_lyle4(1, 1e-6, 1, 1), 20.7463e-7, places=6)
-        self.assertAlmostEqual(L_lyle4(1, 1e-6, 0.5, 1), 28.85335e-7, places=7)
+        assert L_lyle4(1, 1e-6, 2, 1) / mu0 == pytest.approx(1.07970, abs=5e-4)
+        assert L_lyle4(1, 1e-6, 1, 1) == pytest.approx(20.7463e-7, abs=5e-7)
+        assert L_lyle4(1, 1e-6, 0.5, 1) == pytest.approx(28.85335e-7, abs=5e-8)
 
     def test_lyle_terms(self):
         """Test Lyle's formula against his table. See Lyle pg. 429."""
@@ -63,8 +64,8 @@ class TestSelfInductances(unittest.TestCase):
             c = 1.0
             _, _, _, _, _, phi, GMD = _lyle_terms(b, c)
 
-            self.assertAlmostEqual(phi, philyle, places=5)
-            self.assertAlmostEqual(GMD / (b + c), roverbc, places=5)
+            assert phi == pytest.approx(philyle, abs=5e-6)
+            assert GMD / (b + c) == pytest.approx(roverbc, abs=5e-6)
 
 
 if __name__ == "__main__":
