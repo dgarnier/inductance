@@ -1,4 +1,11 @@
-name: Bump version
+name: Prepare release
+
+# Bumps the version and opens a pull request with the change.
+#
+# Merging that PR pushes to main, which triggers the Release workflow: it
+# detects the changed version, tags it, publishes to PyPI and publishes the
+# drafted release notes.  Nothing here pushes to main directly, so this works
+# with branch protection and the release still gets a review + a test run.
 
 on:
   workflow_dispatch:
@@ -13,30 +20,60 @@ on:
           - minor
           - patch
 
+permissions: {}
+
 jobs:
-  build:
+  prepare:
+    name: Open release pull request
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: Checkout the code
+      - name: Check out the code
         uses: actions/checkout@v7
 
-      - name: Set Git configuration for GitHub Actions Bot
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v9.0.0
 
-      - name: Bump version
+      - name: Bump the version
         id: bump
-        uses: callowayproject/bump-my-version@1.5.1
         env:
-          BUMPVERSION_TAG: "true"
-        with:
-          args: ${{ inputs.bump-type }}
-          github-token: ${{ secrets.GH_TOKEN }}
-
-      - name: Check
-        if: steps.bump.outputs.bumped == 'true'
+          BUMP_TYPE: ${{ inputs.bump-type }}
         run: |
-          echo "Version was bumped from ${{ steps.bump.outputs.previous-version }} to ${{ steps.bump.outputs.current-version }}!"
+          previous="$(uv run --only-dev bump-my-version show current_version)"
+          echo "previous-version=$previous" >> "$GITHUB_OUTPUT"
+
+          # bump-my-version is configured with commit = false and tag = false,
+          # so this only rewrites the version strings.  The pull request below
+          # makes the commit; the Release workflow makes the tag.
+          uv run --only-dev bump-my-version bump "$BUMP_TYPE"
+
+          current="$(uv run --only-dev bump-my-version show current_version)"
+          echo "current-version=$current" >> "$GITHUB_OUTPUT"
+          echo "Bumped $previous -> $current"
+
+      - name: Open the release pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          # A PAT is needed for the PR to trigger the Tests workflow; pull
+          # requests opened with the default GITHUB_TOKEN do not start other
+          # workflow runs.
+          token: ${{ secrets.GH_TOKEN || github.token }}
+          branch: release/v${{ steps.bump.outputs.current-version }}
+          delete-branch: true
+          commit-message: "Bump version: ${{ steps.bump.outputs.previous-version }} → ${{ steps.bump.outputs.current-version }}"
+          title: "Release v${{ steps.bump.outputs.current-version }}"
+          labels: release
+          body: |
+            Version bump `${{ steps.bump.outputs.previous-version }}` → `${{ steps.bump.outputs.current-version }}`,
+            prepared by the *Prepare release* workflow.
+
+            Merging this pull request will:
+
+            - tag `v${{ steps.bump.outputs.current-version }}` on `main`
+            - publish the package to PyPI
+            - publish the drafted release notes
+
+            Close it if you are not ready to release; nothing is tagged or
+            published until it merges.
