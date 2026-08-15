@@ -37,18 +37,47 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v9.0.0
 
-      - name: Check if there is a parent commit
-        id: check-parent-commit
-        run: |
-          echo "sha=$(git rev-parse --verify --quiet HEAD^)" >> "$GITHUB_OUTPUT"
-
-      - name: Detect and tag new version
+      # A release is a commit that changes the version in pyproject.toml.
+      # Read it out of git rather than the working tree so the comparison
+      # needs no second checkout, which is what the action this replaces did
+      # -- it ran `git checkout refs/heads/main`, and there is no local branch
+      # to check out when a workflow_run job pins an explicit commit.
+      - name: Detect a new version
         id: check-version
-        if: steps.check-parent-commit.outputs.sha
-        uses: salsify/action-detect-and-tag-new-version@v2.0.3
-        with:
-          version-command: |
-            uv run --only-dev bump-my-version show current_version
+        run: |
+          current="$(uv run --only-dev bump-my-version show current_version)"
+          echo "current-version=$current" >> "$GITHUB_OUTPUT"
+
+          if ! git rev-parse --verify --quiet HEAD^ > /dev/null; then
+            echo "No parent commit, nothing to compare against."
+            exit 0
+          fi
+
+          # bump-my-version reads the version from a config file, so hand it
+          # the previous commit's pyproject.toml rather than parsing anything
+          # here or checking the parent out over the top of the workspace.
+          git show HEAD^:pyproject.toml > "$RUNNER_TEMP/previous-pyproject.toml"
+          previous="$(uv run --only-dev bump-my-version show current_version \
+            --config-file "$RUNNER_TEMP/previous-pyproject.toml")"
+
+          if [ "$current" = "$previous" ]; then
+            echo "Version unchanged at $current."
+          elif git ls-remote --exit-code --tags origin "refs/tags/v$current" > /dev/null; then
+            echo "Version is $current but v$current is already tagged."
+          else
+            echo "Version changed $previous -> $current."
+            echo "tag=v$current" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Tag the new version
+        if: steps.check-version.outputs.tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Released version ${{ steps.check-version.outputs.current-version }}"
+          git push origin "$TAG"
+        env:
+          TAG: ${{ steps.check-version.outputs.tag }}
 
       - name: Bump version for developmental release
         if: ${{ ! steps.check-version.outputs.tag }}
