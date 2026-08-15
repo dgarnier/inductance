@@ -1,14 +1,23 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
+  # Wait for the test matrix rather than racing it.  Tests already runs on
+  # every push to main, so keying off that run gates publishing on it without
+  # defining the matrix twice or running it twice per push.
+  workflow_run:
+    workflows: [Tests]
+    types: [completed]
+    branches: [main]
 
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    # Publish only when the matrix passed, and only for the run triggered by
+    # the push itself: a manual Tests dispatch should not release anything.
+    if: >-
+      github.event.workflow_run.conclusion == 'success'
+      && github.event.workflow_run.event == 'push'
     environment:
       name: release
     permissions:
@@ -21,6 +30,9 @@ jobs:
         uses: actions/checkout@v7 # v7.0.1
         with:
           fetch-depth: 2
+          # A workflow_run job defaults to the tip of the default branch, which
+          # may have moved on.  Use the commit that was actually tested.
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v9.0.0
